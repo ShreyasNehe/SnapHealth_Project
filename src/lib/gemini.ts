@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import OpenAI from "openai";
 
 export interface GeminiRequest {
   model?: string;
@@ -12,15 +11,16 @@ export interface GeminiRequest {
   };
 }
 
-const geminiAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const openaiAi = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY, dangerouslyAllowBrowser: true }) : null;
+const geminiAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // Helper to convert Gemini contents array to OpenAI messages array
 function convertToOpenAIMessages(systemInstruction: string | undefined, contents: any[]): any[] {
   const messages: any[] = [];
   
   if (systemInstruction) {
-    messages.push({ role: 'system', content: systemInstruction });
+    // If response format is json, openai requires the word json in the prompt
+    messages.push({ role: 'system', content: systemInstruction + ' Return as JSON.' });
   }
 
   for (const content of contents) {
@@ -54,8 +54,8 @@ function convertToOpenAIMessages(systemInstruction: string | undefined, contents
 }
 
 export async function generateContent(request: GeminiRequest): Promise<{ text: string }> {
-  // Attempt OpenAI First
-  if (openaiAi) {
+  // Attempt OpenAI First if key is present
+  if (OPENAI_API_KEY && OPENAI_API_KEY !== 'undefined' && OPENAI_API_KEY.length > 5) {
     try {
       const messages = convertToOpenAIMessages(request.config?.systemInstruction, request.contents);
       
@@ -63,13 +63,32 @@ export async function generateContent(request: GeminiRequest): Promise<{ text: s
       const hasImage = messages.some(m => Array.isArray(m.content) && m.content.some((c: any) => c.type === 'image_url'));
       const model = hasImage ? 'gpt-4o' : 'gpt-4o-mini';
 
-      const response = await openaiAi.chat.completions.create({
-        model,
-        messages,
-        response_format: request.config?.responseMimeType === 'application/json' ? { type: 'json_object' } : undefined,
+      const responseFormat = request.config?.responseMimeType === 'application/json' ? { type: 'json_object' } : undefined;
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          response_format: responseFormat,
+        })
       });
 
-      return { text: response.choices[0].message.content || '' };
+      if (!response.ok) {
+        const errData = await response.json().catch(() => null);
+        throw new Error(`OpenAI Error ${response.status}: ${JSON.stringify(errData)}`);
+      }
+
+      const data = await response.json();
+      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        throw new Error("Invalid response format from OpenAI");
+      }
+
+      return { text: data.choices[0].message.content || '' };
     } catch (error) {
       console.warn("OpenAI API Call Failed. Falling back to Gemini...", error);
     }
