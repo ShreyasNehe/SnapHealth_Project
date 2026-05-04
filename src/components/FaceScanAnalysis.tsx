@@ -88,7 +88,7 @@ const FaceScanAnalysis: React.FC<FaceScanAnalysisProps> = ({ onBack }) => {
       if (capturedImages.left) parts.push({ inlineData: { mimeType: "image/jpeg", data: capturedImages.left.split(',')[1] } });
 
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{ parts }]
       });
 

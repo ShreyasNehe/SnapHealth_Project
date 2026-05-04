@@ -37,7 +37,7 @@ const LabInterpreter: React.FC<LabInterpreterProps> = ({ onBack }) => {
     try {
       const base64Data = image.split(',')[1];
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{
           parts: [
             { text: "You are a specialized Clinical Lab Result Interpreter. Analyze this medical report image. 1. OCR the key results. 2. Explain them in VERY SIMPLE ENGLISH language (10-year-old level). Avoid medical jargon. 3. Identify any values outside normal reference ranges. 4. Suggest questions the patient should ask their doctor. 5. Include a strong medical disclaimer. Format with Markdown." },

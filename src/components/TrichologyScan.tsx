@@ -85,7 +85,7 @@ const TrichologyScan: React.FC<TrichologyScanProps> = ({ onBack }) => {
       if (capturedImages.right) parts.push({ inlineData: { mimeType: "image/jpeg", data: capturedImages.right.split(',')[1] } });
 
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{ parts }]
       });
 

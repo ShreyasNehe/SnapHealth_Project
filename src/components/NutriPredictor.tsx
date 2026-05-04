@@ -74,7 +74,7 @@ const NutriPredictor: React.FC<NutriPredictorProps> = ({ onBack }) => {
     try {
       const base64Data = activeImage.split(',')[1];
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{
           parts: [
             { text: "Analyze this meal image for metabolic impact. Estimate the Glycemic Load, Glycemic Index, and primary macronutrients. Predict if it will cause a glucose spike. IMPORTANT: The 'clinicalNote' and 'item' MUST be in VERY SIMPLE ENGLISH (10-year-old level). Return ONLY a JSON object matching this schema: { \"item\": \"string\", \"glycemicLoad\": number, \"glycemicIndex\": number, \"estimatedCalories\": number, \"macros\": { \"protein\": \"string\", \"carbs\": \"string\", \"fats\": \"string\" }, \"predictedGlucoseResponse\": \"stable\"|\"spike\"|\"moderate\", \"clinicalNote\": \"string\", \"alternatives\": string[] }" },

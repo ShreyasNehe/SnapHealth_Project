@@ -153,7 +153,7 @@ const HeadFaceProScan: React.FC<HeadFaceProScanProps> = ({ onBack }) => {
       });
 
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{ role: 'user', parts }],
         config: { responseMimeType: "application/json" }
       });

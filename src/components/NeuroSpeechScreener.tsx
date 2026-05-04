@@ -87,7 +87,7 @@ const NeuroSpeechScreener: React.FC<NeuroSpeechScreenerProps> = ({ onBack }) => 
     setIsAnalyzing(true);
     try {
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{
           parts: [{
             text: `You are a specialized Neuro-Vocal Bio-Marker analyzer. Analyze the following transcript of a patient's speech for neurological and cognitive indicators. 

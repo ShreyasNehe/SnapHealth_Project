@@ -68,7 +68,7 @@ const OdonticGuard: React.FC<OdonticGuardProps> = ({ onBack }) => {
     try {
       const base64Data = activeImage.split(',')[1];
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{
           parts: [
             { text: "Act as an AI Dental Professional and Periodontist. Analyze this image of teeth and gums. Identify: 1. Gum health (inflammation/redness). 2. Enamel state (whiteness vs erosion marks). 3. Plaque index. 4. Potential alerts. IMPORTANT: All text in 'careProtocol' and 'simpleExplanation' MUST be in VERY SIMPLE ENGLISH (10-year-old level). Avoid medical jargon. Output ONLY a JSON object matching this schema: { \"gumHealth\": \"optimal\"|\"inflamed\"|\"receding\", \"enamelState\": \"strong\"|\"weakened\"|\"eroded\", \"plaqueIndex\": \"low\"|\"moderate\"|\"high\", \"dentalAlerts\": string[], \"careProtocol\": \"string\", \"simpleExplanation\": \"string\" }" },

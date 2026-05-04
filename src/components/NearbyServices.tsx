@@ -41,7 +41,7 @@ export default function NearbyServices() {
       
       try {
         const response = await generateContent({
-          model: "gemini-3-flash-preview",
+          model: "gemini-2.5-flash",
           contents: [{ 
             role: 'user', 
             parts: [{ text: `Find the 5 closest hospitals or urgent care clinics near Latitude: ${latitude}, Longitude: ${longitude}. Provide their name, full address, and phone number. Use Google Search to ensure accuracy. Output as a JSON array of objects with keys: name, address, phone, type.` }] 

@@ -99,7 +99,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ profile, symptoms, vitals
 
     try {
       const response = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{ role: 'user', parts: [{ text: 'Please begin the clinical triage interview.' }] }],
         config: {
           systemInstruction: systemPrompt,
@@ -148,7 +148,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ profile, symptoms, vitals
       const systemPrompt = SYSTEM_PROMPT_INTAKE(profile, symptoms, vitals);
       
       const response = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: newMessages.map(m => ({
           role: m.role === 'user' ? 'user' : 'model',
           parts: [{ text: m.content }]

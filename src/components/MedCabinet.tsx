@@ -97,7 +97,7 @@ const MedCabinet: React.FC<MedCabinetProps> = ({ onBack }) => {
     try {
       const base64Data = activeImage.split(',')[1];
       const result = await generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: [{
           parts: [
             { text: "Analyze this medication bottle. Identify: 1. Name and Generic Name. 2. Purpose. 3. Look for expiry dates if visible. 4. Provide a safety flag (safe, caution, dangerous) based on common side effects or critical warnings. 5. Provide a summary. IMPORTANT: All text in 'purpose', 'dosageWarning', and 'explanation' MUST be in VERY SIMPLE ENGLISH (10-year-old level). Avoid medical jargon. Output ONLY a JSON object matching this schema: { \"name\": \"...\", \"genericName\": \"...\", \"isExpired\": boolean, \"purpose\": \"...\", \"dosageWarning\": \"...\", \"safetyFlag\": \"safe\"|\"caution\"|\"dangerous\", \"explanation\": \"...\" }" },

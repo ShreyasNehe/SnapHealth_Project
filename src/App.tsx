@@ -348,7 +348,7 @@ export default function App() {
       if (!profile.medications.trim()) return;
       try {
         const response = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
+          model: "gemini-2.5-flash",
           contents: [{ role: 'user', parts: [{ text: `Check for interactions: ${profile.medications}` }] }],
           config: {
             systemInstruction: "Given a list of medications, provide a short array of strings flagging any known interactions or contraindications relevant to an emergency triage situation. format: [\"Interaction 1\", \"...\"]"
@@ -383,7 +383,7 @@ export default function App() {
   const saveAcknowledgment = () => {
     localStorage.setItem('snaphealth_acknowledged', 'true');
     setShowDisclaimer(false);
-    setScreen('profile');
+    setScreen('welcome');
   };
 
   const addSymptom = (zone: string, x: number, y: number) => {
@@ -425,7 +425,7 @@ export default function App() {
       
       try {
         const response = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
+          model: "gemini-2.5-flash",
           contents: [
             { role: 'user', parts: [
               { text: "Analyze this medical symptom. Provide 1 sentence observation." },
