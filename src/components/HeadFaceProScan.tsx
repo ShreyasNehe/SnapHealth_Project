@@ -158,8 +158,13 @@ const HeadFaceProScan: React.FC<HeadFaceProScanProps> = ({ onBack }) => {
         config: { responseMimeType: "application/json" }
       });
 
-      const data = JSON.parse(result.text);
-      setAnalysis(data);
+      const text = result.text || '';
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        setAnalysis(JSON.parse(jsonMatch[0]));
+      } else {
+        throw new Error("Unable to parse diagnostic data.");
+      }
     } catch (err) {
       console.error(err);
       setError("Analysis Engine Overload. Please ensure images are clear.");

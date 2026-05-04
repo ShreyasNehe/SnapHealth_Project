@@ -1,7 +1,4 @@
-/**
- * Client-side service to call the Gemini API via the server-side proxy.
- * This keeps the API key secure on the server and works well for production deployments like Vercel.
- */
+import { GoogleGenAI } from "@google/genai";
 
 export interface GeminiRequest {
   model?: string;
@@ -14,22 +11,17 @@ export interface GeminiRequest {
   };
 }
 
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 export async function generateContent(request: GeminiRequest): Promise<{ text: string }> {
   try {
-    const response = await fetch('/api/ai/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request),
+    const response = await ai.models.generateContent({
+      model: request.model || "gemini-2.5-flash",
+      contents: request.contents,
+      config: request.config
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || `Server responded with ${response.status}`);
-    }
-
-    return await response.json();
+    return { text: response.text || '' };
   } catch (error: any) {
     console.error("Gemini API Call Error:", error);
     throw error;
