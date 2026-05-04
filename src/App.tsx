@@ -29,9 +29,7 @@ import TrichologyScan from './components/TrichologyScan';
 import HealthTwin from './components/HealthTwin';
 import HeadFaceProScan from './components/HeadFaceProScan';
 
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+import { generateContent } from './lib/gemini';
 
 type Screen = 'welcome' | 'profile' | 'bodymap' | 'chat' | 'dashboard' | 'report' | 'services' | 'lab' | 'emergency' | 'cabinet' | 'speech' | 'nutrition' | 'facial' | 'ocular' | 'odontic' | 'trichology' | 'pro-scan';
 
@@ -347,7 +345,7 @@ export default function App() {
     const checkMeds = async () => {
       if (!profile.medications.trim()) return;
       try {
-        const response = await ai.models.generateContent({
+        const response = await generateContent({
           model: "gemini-2.5-flash",
           contents: [{ role: 'user', parts: [{ text: `Check for interactions: ${profile.medications}` }] }],
           config: {
@@ -424,7 +422,7 @@ export default function App() {
       updateSymptom(id, { imageUrl: e.target?.result as string });
       
       try {
-        const response = await ai.models.generateContent({
+        const response = await generateContent({
           model: "gemini-2.5-flash",
           contents: [
             { role: 'user', parts: [
