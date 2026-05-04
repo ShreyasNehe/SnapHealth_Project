@@ -1,0 +1,6 @@
+{
+  "name": "SnapHealth AI",
+  "description": "Medical-grade AI Symptom Triage Assistant with body mapping, AI intake, and clinical reporting.",
+  "requestFramePermissions": ["microphone", "geolocation", "camera"],
+  "majorCapabilities": ["AI reasoning", "Clinical triage", "Data visualization"]
+}
